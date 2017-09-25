@@ -27,7 +27,7 @@ app.prepare().then(() => {
 	});
 
 	// MongoDB
-	mongoose.connect(MONGODB_URI);
+	mongoose.connect(MONGODB_URI, { useMongoClient: true });
 	var db = mongoose.connection;
 	db.on('error', console.error.bind(console, 'connection error:'));
 
