@@ -2,6 +2,12 @@
 
 Based on [nextjs-express-boilerplate](https://github.com/johhansantana/nextjs-express-boilerplate), but with added [mongoose-crudify](https://github.com/ryo718/mongoose-crudify).
 
+
+## Why is this awesome?
+
+This is a great starting point for a any project where you want React (with server-side rendering, powered by [Next.js](https://github.com/zeit/next.js)) as frontend and Express/MongoDB as backend.
+
+
 ## How to use
 
 Clone this repository:
@@ -23,6 +29,22 @@ In production:
 	npm run build
 	npm start
 
-Now you will have your API server running, available at `/api/kittens`
-
 If you navigate to `http://localhost:3001/` you will see a [Next.js](https://github.com/zeit/next.js) page with a list of kittens (or an empty list if you haven't added one).
+
+You have your API server running at `http://localhost:3001/api/kittens`
+
+
+## Deploying
+
+### Deploying on Heroku
+
+	# Set up and configure app
+	heroku create MYAPPNAME
+	heroku addons:add mongolab
+	heroku config:set NODE_ENV=production
+	
+	git push herou master
+
+### Deploying on Now
+
+See instructions on [nextjs-express-boilerplate](https://github.com/johhansantana/nextjs-express-boilerplate)
