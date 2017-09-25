@@ -2,9 +2,9 @@ import fetch from 'isomorphic-unfetch'
 
 export default class IndexPage extends React.Component {
 
-	static async getInitialProps ({query}) {
+	static async getInitialProps ({req, res, query}) {
 		try {
-			const url = `http://localhost:3001/api/kittens`;
+			const url = `${req.headers.referer}api/kittens`;
 			const response = await fetch(url);
 			const kittensJson = await response.json();
 			return { kittens: kittensJson };
