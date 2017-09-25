@@ -6,11 +6,11 @@ Based on [nextjs-express-boilerplate](https://github.com/johhansantana/nextjs-ex
 
 Clone this repository:
 
-	git clone https://github.com/tomsoderlund/nextjs-express-mongoose-crudify-boilerplate.git
+	git clone https://github.com/tomsoderlund/nextjs-express-mongoose-crudify-boilerplate.git [MY_APP]
 
 Install dependencies:
 
-	cd nextjs-express-boilerplate
+	cd [MY_APP]
 	npm install  # or yarn install
 
 Start it by doing the following:
