@@ -21,7 +21,7 @@ Install dependencies:
 
 Start it by doing the following:
 
-	export MONGO_URL=*your mongodb url* // you can get one for free at https://www.mlab.com/home
+	export MONGODB_URI=*your mongodb url* // you can get one for free at https://www.mlab.com/home
 	npm run dev
 
 In production:
@@ -42,8 +42,8 @@ You have your API server running at `http://localhost:3001/api/kittens`
 	heroku create MYAPPNAME
 	heroku addons:add mongolab
 	heroku config:set NODE_ENV=production
-	
-	git push herou master
+
+	git push heroku master
 
 ### Deploying on Now
 

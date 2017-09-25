@@ -9,7 +9,7 @@ const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
-const MONGO_URL = process.env.MONGO_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/nextjs-express-boilerplate'
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/nextjs-express-boilerplate'
 const PORT = 3001
 
 app.prepare().then(() => {
@@ -27,7 +27,7 @@ app.prepare().then(() => {
 	});
 
 	// MongoDB
-	mongoose.connect(MONGO_URL);
+	mongoose.connect(MONGODB_URI);
 	var db = mongoose.connection;
 	db.on('error', console.error.bind(console, 'connection error:'));
 
