@@ -2,6 +2,7 @@ const express = require('express');
 const server = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const glob = require('glob');
 
 const next = require('next')
 const dev = process.env.NODE_ENV !== 'production'
@@ -31,7 +32,8 @@ app.prepare().then(() => {
 	db.on('error', console.error.bind(console, 'connection error:'));
 
 	// API routes
-	require('./routes/kittens')(server);
+	const rootPath = require('path').normalize(__dirname + '/..');
+	glob.sync(rootPath + '/server/routes/*.js').forEach(controllerPath => require(controllerPath)(server));
 
 	// Next.js route
 	server.get('*', (req, res) => {
