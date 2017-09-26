@@ -28,25 +28,24 @@ export default class IndexPage extends React.Component {
 	}
 
 	handleAdd (event) {
-		if (this.state.name !== '') {
-			const newKitten = {
-				name: this.state.name,
-			};
-			const updateLocalKittenState = function (results) {
-				this.setState({ name: '', kittens: this.state.kittens.concat(newKitten) });
-			};
-			// POST on API
-			fetch(this.props.apiUrl, {
-				method: 'POST',
-				body: JSON.stringify(newKitten),
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-				},
-			})
-			.then(updateLocalKittenState.bind(this))
-			.catch(err => console.error('POST error', err));			
-		}
+		const newKitten = {
+			name: this.state.name,
+		};
+		const updateLocalKittenState = function (results) {
+			console.log('add', arguments);
+			this.setState({ name: '', kittens: this.state.kittens.concat(newKitten) });
+		};
+		// POST on API
+		fetch(this.props.apiUrl, {
+			method: 'POST',
+			body: JSON.stringify(newKitten),
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+			},
+		})
+		.then(updateLocalKittenState.bind(this))
+		.catch(err => console.error('POST error', err));			
 	}
 
 	handleDelete (index, kittenId, event) {
