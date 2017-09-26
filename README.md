@@ -5,7 +5,8 @@ Based on [nextjs-express-boilerplate](https://github.com/johhansantana/nextjs-ex
 
 ## Why is this awesome?
 
-This is a great starting point for a any project where you want **React** (with server-side rendering, powered by [Next.js](https://github.com/zeit/next.js)) as frontend and **Express/MongoDB** as a REST API backend. Lightning fast, all in JavaScript.
+This is a great starting point for a any project where you want **React** (with server-side rendering, powered by [Next.js](https://github.com/zeit/next.js)) as frontend and **Express/MongoDB** as a REST API backend.
+Lightning fast, all JavaScript.
 
 ## Demo
 
@@ -43,7 +44,6 @@ You have your API server running at `http://localhost:3001/api/kittens`
 
 ### Deploying on Heroku
 
-	# Set up and configure app
 	heroku create [MY_APP]
 	heroku addons:add mongolab
 	git push heroku master
