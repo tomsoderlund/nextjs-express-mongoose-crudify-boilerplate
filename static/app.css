@@ -1,0 +1,18 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 1em;
+	font-family: sans-serif;
+	font-size: 20px;
+}
+
+input, button {
+	font-family: inherit;
+	font-size: inherit;
+}
+
+button {
+	cursor: pointer;
+}

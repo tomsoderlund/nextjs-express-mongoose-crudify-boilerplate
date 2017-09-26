@@ -1,10 +1,12 @@
 import fetch from 'isomorphic-unfetch'
+import Head from 'next/head'
 
 export default class IndexPage extends React.Component {
 
 	static async getInitialProps ({req, res, query}) {
 		try {
-			const url = `${req.headers.referer}api/kittens`;
+			const host = req.headers.referer || 'http://localhost:3001/';
+			const url = `${host}api/kittens`;
 			const response = await fetch(url);
 			const kittensJson = await response.json();
 			return { apiUrl: url, kittens: kittensJson };
@@ -14,9 +16,9 @@ export default class IndexPage extends React.Component {
 		}
 	};
 
-	constructor(props) {
+	constructor (props) {
 		super(props)
-		this.state = { name: '' }
+		this.state = { name: '', kittens: props.kittens }
 	}
 
 	handleChange (event) {
@@ -24,29 +26,74 @@ export default class IndexPage extends React.Component {
 	}
 
 	handleAdd (event) {
-		fetch(this.props.apiUrl, {
-			method: 'POST',
-			body: JSON.stringify({
+		if (this.state.name !== '') {
+			const newKitten = {
 				name: this.state.name,
-			}),
+			};
+			const updateLocalKittenState = function (results) {
+				this.setState({ name: '', kittens: this.state.kittens.concat(newKitten) });
+			};
+			// POST on API
+			fetch(this.props.apiUrl, {
+				method: 'POST',
+				body: JSON.stringify(newKitten),
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				},
+			})
+			.then(updateLocalKittenState.bind(this))
+			.catch(err => console.error('POST error', err));			
+		}
+	}
+
+	handleDelete (index, kittenId, event) {
+		const updateLocalKittenState = function (results) {
+			this.setState({ kittens: this.state.kittens.filter(function (kitten) { return kitten._id !== kittenId }) });
+		};
+		// DELETE on API
+		fetch(this.props.apiUrl + '/' + kittenId, {
+			method: 'DELETE',
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
 			},
 		})
-		.then(results => console.log('Fetch results', results))
-		.catch(err => console.error('Fetch error', err));
+		.then(updateLocalKittenState.bind(this))
+		.catch(err => console.error('DELETE error', err));
 	}
 
 	render () {
 
-		const kittenList = this.props.kittens ? this.props.kittens.map((kitten, key) => <div key={key}>{kitten.name}</div>) : [];
+		const kittenList = this.state.kittens ? this.state.kittens.map((kitten, index) =>
+			<div key={index}>
+				{kitten.name} 
+				<a onClick={this.handleDelete.bind(this, index, kitten._id)}>x</a>
+				<style jsx>{`
+					a {
+						color: tomato;
+						margin-left: 0.5em;
+						cursor: pointer;
+					}
+				`}</style>
+			</div>
+		) : [];
 
 		return <div>
+			<Head>
+				<link rel="stylesheet" href="/static/app.css"/>
+			</Head>
 			<h1>Kittens</h1>
 			{kittenList}
-			<input value={this.state.name} onChange={this.handleChange.bind(this)} placeholder='Enter a kitten name'/>
-			<button onClick={this.handleAdd.bind(this)}>Add kitten</button>
+			<div>
+				<input value={this.state.name} onChange={this.handleChange.bind(this)} placeholder='Enter a kitten name'/>
+				<button onClick={this.handleAdd.bind(this)}>Add kitten</button>
+				<style jsx>{`
+					div {
+						margin-top: 1em;
+					}
+				`}</style>
+			</div>
 		</div>
 	};
 
