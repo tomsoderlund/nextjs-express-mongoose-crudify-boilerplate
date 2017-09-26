@@ -11,6 +11,8 @@ This is a great starting point for a any project where you want **React** (with 
 
 See [**nextjs-express-mongoose-crudify-boilerplate** running on Heroku here](https://nextjs-express-mongoose.herokuapp.com/).
 
+![nextjs-express-mongoose-crudify-boilerplate demo on Heroku](docs/kittens-demo.gif)
+
 ## How to use
 
 Clone this repository:
