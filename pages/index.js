@@ -84,6 +84,9 @@ export default class IndexPage extends React.Component {
 		return <div>
 			<Head>
 				<title>Next.js (React) + Express REST API + MongoDB + Mongoose-Crudify boilerplate</title>
+				<meta name="description" content="Demo of nextjs-express-mongoose-crudify-boilerplate"/>
+				<meta charset="utf-8"/>
+				<meta name="viewport" content="initial-scale=1.0, width=device-width"/>
 				<link rel="stylesheet" href="/static/app.css"/>
 			</Head>
 			<h1>Kittens</h1>

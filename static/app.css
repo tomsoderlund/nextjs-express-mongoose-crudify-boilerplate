@@ -8,11 +8,63 @@ body {
 	font-size: 20px;
 }
 
-input, button {
-	font-family: inherit;
-	font-size: inherit;
+@media only screen and (max-width: 480px) {
+	input, button {
+		width: 100%;
+	}
 }
 
+/* Nice & simple: Button - http://codepen.io/tomsoderlund/pen/qqyzqp */
 button {
+	background-color: dodgerblue;
+	border-radius: 0.2em;
+	border: none;
+	box-shadow: 0 0.125em 0.125em rgba(0,0,0, 0.3);
+	box-sizing: border-box;
+	color: white;
 	cursor: pointer;
+	font-family: inherit;
+	font-size: inherit;
+	font-weight: bold;
+	outline: none;
+	padding: 0.6em;
+	margin: 0.2em;
+	transition: all 0.2s;
+}
+button:hover {
+	opacity: 0.8;
+	transition: box-shadow 0s;
+}
+button:active {
+	margin-top: 0.3em;
+	margin-bottom: 0.1em;
+	box-shadow: 0 0.5px 0.125em rgba(0,0,0, 0.4);
+}
+
+/* Nice & simple: Input and Dropdown Menu - http://codepen.io/tomsoderlund/pen/GNBbWz */
+input,
+textarea,
+select {
+	outline: none;
+	resize: none;
+	box-shadow: inset 0 0.125em 0.125em rgba(0,0,0, 0.3);
+	box-sizing: border-box;
+	background-color: white;
+	border-radius: 0.2em;
+	border: 2px solid lightgray;
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+	padding: 0.6em;
+	margin: 0.2em;
+}
+input:hover,
+textarea:hover,
+select:hover {
+	border-color: silver;
+}
+input:focus,
+textarea:focus,
+select:focus {
+	border-color: darkgray;
 }
