@@ -83,7 +83,7 @@ export default class IndexPage extends React.Component {
 
 		return <div>
 			<Head>
-				<title>Next.js (React) + Express + MongoDB + Mongoose-Crudify boilerplate</title>
+				<title>Next.js (React) + Express REST API + MongoDB + Mongoose-Crudify boilerplate</title>
 				<link rel="stylesheet" href="/static/app.css"/>
 			</Head>
 			<h1>Kittens</h1>
