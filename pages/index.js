@@ -5,8 +5,9 @@ export default class IndexPage extends React.Component {
 
 	static async getInitialProps ({req, res, query}) {
 		try {
-			const host = req.headers.referer || 'http://localhost:3001/';
-			const url = `${host}api/kittens`;
+			const baseUrl = req ? `${req.protocol}://${req.headers.host}` : '';
+			console.log('baseUrl', baseUrl);
+			const url = `${baseUrl}/api/kittens`;
 			const response = await fetch(url);
 			const kittensJson = await response.json();
 			return { apiUrl: url, kittens: kittensJson };
