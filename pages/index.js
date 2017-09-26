@@ -32,7 +32,7 @@ export default class IndexPage extends React.Component {
 			name: this.state.name,
 		};
 		const updateLocalKittenState = function (results) {
-			console.log('add', arguments);
+			console.log('POST', results);
 			this.setState({ name: '', kittens: this.state.kittens.concat(newKitten) });
 		};
 		// POST on API
@@ -50,6 +50,7 @@ export default class IndexPage extends React.Component {
 
 	handleDelete (index, kittenId, event) {
 		const updateLocalKittenState = function (results) {
+			console.log('DELETE', results);
 			this.setState({ kittens: this.state.kittens.filter(function (kitten) { return kitten._id !== kittenId }) });
 		};
 		// DELETE on API
@@ -82,6 +83,7 @@ export default class IndexPage extends React.Component {
 
 		return <div>
 			<Head>
+				<title>Next.js (React) + Express + MongoDB + Mongoose-Crudify boilerplate</title>
 				<link rel="stylesheet" href="/static/app.css"/>
 			</Head>
 			<h1>Kittens</h1>
