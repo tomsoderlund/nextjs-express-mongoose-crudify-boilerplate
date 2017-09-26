@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "nodemon -w server -w package.json server/index.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server/index.js"
+    "start": "NODE_ENV=production node server/index.js",
+    "heroku-postbuild": "next build"
   },
   "license": "ISC",
   "dependencies": {
