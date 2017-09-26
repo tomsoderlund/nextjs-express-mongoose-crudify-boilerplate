@@ -10,7 +10,7 @@ const app = next({ dev })
 const handle = app.getRequestHandler()
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/nextjs-express-boilerplate'
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 
 app.prepare().then(() => {
 
