@@ -1,12 +1,15 @@
-# nextjs-express-mongoose-crudify-boilerplate
+# Next.js (React) + Express + MongoDB + Mongoose-Crudify boilerplate
 
 Based on [nextjs-express-boilerplate](https://github.com/johhansantana/nextjs-express-boilerplate), but with added [mongoose-crudify](https://github.com/ryo718/mongoose-crudify).
 
 
 ## Why is this awesome?
 
-This is a great starting point for a any project where you want React (with server-side rendering, powered by [Next.js](https://github.com/zeit/next.js)) as frontend and Express/MongoDB as backend.
+This is a great starting point for a any project where you want **React** (with server-side rendering, powered by [Next.js](https://github.com/zeit/next.js)) as frontend and **Express/MongoDB** as backend. Lightning fast, all in JavaScript.
 
+## Demo
+
+See [**nextjs-express-mongoose-crudify-boilerplate** running on Heroku here](https://nextjs-express-mongoose.herokuapp.com/).
 
 ## How to use
 
@@ -39,12 +42,10 @@ You have your API server running at `http://localhost:3001/api/kittens`
 ### Deploying on Heroku
 
 	# Set up and configure app
-	heroku create MYAPPNAME
+	heroku create [MY_APP]
 	heroku addons:add mongolab
-	heroku config:set NODE_ENV=production
-
 	git push heroku master
 
 ### Deploying on Now
 
-See instructions on [nextjs-express-boilerplate](https://github.com/johhansantana/nextjs-express-boilerplate)
+See instructions on [nextjs-express-boilerplate](https://github.com/johhansantana/nextjs-express-boilerplate).
