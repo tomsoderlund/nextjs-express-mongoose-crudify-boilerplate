@@ -7,7 +7,6 @@ export default class IndexPage extends React.Component {
 		try {
 			const protocol = req.headers['x-forwarded-proto'] || 'http';
 			const baseUrl = req ? `${protocol}://${req.headers.host}` : '';
-			console.log('baseUrl', baseUrl);
 			const url = `${baseUrl}/api/kittens`;
 			const response = await fetch(url);
 			const kittensJson = await response.json();
@@ -85,7 +84,7 @@ export default class IndexPage extends React.Component {
 			<Head>
 				<title>Next.js (React) + Express REST API + MongoDB + Mongoose-Crudify boilerplate</title>
 				<meta name="description" content="Demo of nextjs-express-mongoose-crudify-boilerplate"/>
-				<meta charset="utf-8"/>
+				<meta charSet="utf-8"/>
 				<meta name="viewport" content="initial-scale=1.0, width=device-width"/>
 				<link rel="stylesheet" href="/static/app.css"/>
 			</Head>
