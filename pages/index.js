@@ -1,20 +1,39 @@
 import fetch from 'isomorphic-unfetch'
 import Head from 'next/head'
 
-export default class IndexPage extends React.Component {
+import React from 'react';
+import PropTypes from 'prop-types';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import thunk from 'redux-thunk';
+import { Provider, connect } from 'react-redux';
+import reduxApi from '../lib/reduxApi'; // our redux-rest object
 
-	static async getInitialProps ({req, res, query}) {
-		try {
-			const protocol = req.headers['x-forwarded-proto'] || 'http';
-			const baseUrl = req ? `${protocol}://${req.headers.host}` : '';
-			const url = `${baseUrl}/api/kittens`;
-			const response = await fetch(url);
-			const kittensJson = await response.json();
-			return { apiUrl: url, kittens: kittensJson };
-		}
-		catch (err) {
-			return { error: 'Could not load kittens' }
-		}
+const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const reducer = combineReducers(reduxApi.reducers);
+const store = createStoreWithMiddleware(reducer);
+
+function mapStateToProps(state) {
+	return { kittens: state.kittens };
+}
+
+class IndexPage extends React.Component {
+
+	static propTypes = {
+
+		// oneKitten: PropTypes.shape({
+		// 	loading: PropTypes.bool.isRequired,
+		// 	data: PropTypes.shape({
+		// 		text: PropTypes.string
+		// 	}).isRequired
+		// }).isRequired,
+
+		kittens: PropTypes.shape({
+			loading: PropTypes.bool.isRequired,
+			data: PropTypes.array.isRequired
+		}).isRequired,
+
+		dispatch: PropTypes.func.isRequired
+		
 	};
 
 	constructor (props) {
@@ -64,9 +83,20 @@ export default class IndexPage extends React.Component {
 		.catch(err => console.error('DELETE error', err));
 	}
 
+	componentDidMount() {
+		console.log('this.props', this.props);
+		const {dispatch} = this.props;
+		// fetch /api/kittens
+		dispatch(reduxApi.actions.kittens.sync());
+		// specify id for GET: /api/kittens/59c9743888a7e95e93c3bbea
+		//dispatch(reduxApi.actions.oneKitten({ id: '59c9743888a7e95e93c3bbea' }));
+	}
+
 	render () {
 
-		const kittenList = this.state.kittens ? this.state.kittens.map((kitten, index) =>
+		const {kittens} = this.props;
+
+		const kittenList = kittens.data ? kittens.data.map((kitten, index) =>
 			<div key={index}>
 				{kitten.name} 
 				<a onClick={this.handleDelete.bind(this, index, kitten._id)}>x</a>
@@ -103,3 +133,15 @@ export default class IndexPage extends React.Component {
 	};
 
 }
+
+// From https://github.com/reactjs/react-redux/issues/390#issuecomment-221389608
+function connectWithStore(store, WrappedComponent, ...args) {
+	var ConnectedWrappedComponent = connect(...args)(WrappedComponent)
+	return function (props) {
+		return <ConnectedWrappedComponent {...props} store={store} />
+	}
+}
+
+const IndexPageConnected = connectWithStore(store, IndexPage, mapStateToProps);
+
+export default IndexPageConnected;
