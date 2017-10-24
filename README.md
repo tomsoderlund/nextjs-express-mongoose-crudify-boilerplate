@@ -1,11 +1,12 @@
-# Next.js (React) + Express REST API + MongoDB + Mongoose-Crudify boilerplate
+# Next.js (React) + Redux + Express REST API + MongoDB + Mongoose-Crudify boilerplate
 
-Based on [nextjs-express-boilerplate](https://github.com/johhansantana/nextjs-express-boilerplate), but with added [mongoose-crudify](https://github.com/ryo718/mongoose-crudify).
+Based on [nextjs-express-boilerplate](https://github.com/johhansantana/nextjs-express-boilerplate), but with added [mongoose-crudify](https://github.com/ryo718/mongoose-crudify) and [redux-api](https://github.com/lexich/redux-api)*.
 
+*Consider replacing redux-api with [redux-api-middleware](https://github.com/agraboso/redux-api-middleware)
 
 ## Why is this awesome?
 
-This is a great starting point for a any project where you want **React** (with server-side rendering, powered by [Next.js](https://github.com/zeit/next.js)) as frontend and **Express/MongoDB** as a REST API backend.
+This is a great starting point for a any project where you want **React + Redux** (with server-side rendering, powered by [Next.js](https://github.com/zeit/next.js)) as frontend and **Express/MongoDB** as a REST API backend.
 Lightning fast, all JavaScript.
 
 ## Demo

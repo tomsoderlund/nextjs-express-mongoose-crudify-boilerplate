@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider, connect } from 'react-redux';
+
 import reduxApi from '../lib/reduxApi'; // our redux-rest object
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
@@ -49,42 +50,28 @@ class IndexPage extends React.Component {
 		const newKitten = {
 			name: this.state.name,
 		};
-		const updateLocalKittenState = function (results) {
-			console.log('POST', results);
-			this.setState({ name: '', kittens: this.state.kittens.concat(newKitten) });
-		};
-		// POST on API
-		fetch(this.props.apiUrl, {
-			method: 'POST',
-			body: JSON.stringify(newKitten),
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-			},
-		})
-		.then(updateLocalKittenState.bind(this))
-		.catch(err => console.error('POST error', err));			
+
+		const updateLocalKittenState = function (err, results) {
+			console.log('POST 2', err, results);
+			//this.setState({ name: '', kittens: this.state.kittens.data.concat(newKitten) });
+		};			
+
+		console.log('POST 1', JSON.stringify(newKitten));
+		this.props.dispatch(reduxApi.actions.kittens.post({}, { body: JSON.stringify(newKitten) }, updateLocalKittenState));
 	}
 
 	handleDelete (index, kittenId, event) {
-		const updateLocalKittenState = function (results) {
-			console.log('DELETE', results);
-			this.setState({ kittens: this.state.kittens.filter(function (kitten) { return kitten._id !== kittenId }) });
-		};
-		// DELETE on API
-		fetch(this.props.apiUrl + '/' + kittenId, {
-			method: 'DELETE',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-			},
-		})
-		.then(updateLocalKittenState.bind(this))
-		.catch(err => console.error('DELETE error', err));
+
+		const updateLocalKittenState = function (err, results) {
+			console.log('DELETE 2', err, results, this);
+			//this.setState({ kittens: this.state.kittens.data.filter(function (kitten) { return kitten._id !== kittenId }) });
+		};	
+
+		console.log('DELETE 1', index, kittenId);
+		this.props.dispatch(reduxApi.actions.kittens.delete({ id: kittenId }, updateLocalKittenState));
 	}
 
 	componentDidMount() {
-		console.log('this.props', this.props);
 		const {dispatch} = this.props;
 		// fetch /api/kittens
 		dispatch(reduxApi.actions.kittens.sync());
