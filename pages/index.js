@@ -34,7 +34,7 @@ class IndexPage extends React.Component {
 		}).isRequired,
 
 		dispatch: PropTypes.func.isRequired
-		
+
 	};
 
 	constructor (props) {
@@ -51,32 +51,45 @@ class IndexPage extends React.Component {
 			name: this.state.name,
 		};
 
-		const updateLocalKittenState = function (err, results) {
+		const afterRestRequest = function (err, results) {
 			console.log('POST 2', err, results);
-			//this.setState({ name: '', kittens: this.state.kittens.data.concat(newKitten) });
-		};			
+		};
 
 		console.log('POST 1', JSON.stringify(newKitten));
-		this.props.dispatch(reduxApi.actions.kittens.post({}, { body: JSON.stringify(newKitten) }, updateLocalKittenState));
+		this.props.dispatch(reduxApi.actions.kittens.post({}, { body: JSON.stringify(newKitten) }, afterRestRequest));
+	}
+
+	handleUpdate (index, kittenId, event) {
+		const newKitten = {
+			name: prompt('New kitten name?'),
+		};
+
+		const afterRestRequest = function (err, results) {
+			console.log('PUT 2', err, results, this);
+		};
+
+		console.log('PUT 1', index, kittenId, JSON.stringify(newKitten));
+		this.props.dispatch(reduxApi.actions.kittens.put({ id: kittenId }, { body: JSON.stringify(newKitten) }, afterRestRequest));
 	}
 
 	handleDelete (index, kittenId, event) {
 
-		const updateLocalKittenState = function (err, results) {
+		const afterRestRequest = function (err, results) {
 			console.log('DELETE 2', err, results, this);
-			//this.setState({ kittens: this.state.kittens.data.filter(function (kitten) { return kitten._id !== kittenId }) });
-		};	
+		};
 
 		console.log('DELETE 1', index, kittenId);
-		this.props.dispatch(reduxApi.actions.kittens.delete({ id: kittenId }, updateLocalKittenState));
+		this.props.dispatch(reduxApi.actions.kittens.delete({ id: kittenId }, afterRestRequest));
 	}
 
 	componentDidMount() {
 		const {dispatch} = this.props;
-		// fetch /api/kittens
-		dispatch(reduxApi.actions.kittens.sync());
-		// specify id for GET: /api/kittens/59c9743888a7e95e93c3bbea
+
+		// Specify id for GET: /api/kittens/59c9743888a7e95e93c3bbea
 		//dispatch(reduxApi.actions.oneKitten({ id: '59c9743888a7e95e93c3bbea' }));
+
+		// Fetch all /api/kittens
+		dispatch(reduxApi.actions.kittens.sync());
 	}
 
 	render () {
@@ -86,12 +99,20 @@ class IndexPage extends React.Component {
 		const kittenList = kittens.data ? kittens.data.map((kitten, index) =>
 			<div key={index}>
 				{kitten.name} 
-				<a onClick={this.handleDelete.bind(this, index, kitten._id)}>x</a>
+				<a className="update" onClick={this.handleUpdate.bind(this, index, kitten._id)}>Update</a>
+				<a className="delete" onClick={this.handleDelete.bind(this, index, kitten._id)}>Delete</a>
 				<style jsx>{`
 					a {
-						color: tomato;
 						margin-left: 0.5em;
 						cursor: pointer;
+						font-size: 0.6em;
+						text-transform: uppercase;
+					}
+					a.update {
+						color: lime;
+					}
+					a.delete {
+						color: tomato;
 					}
 				`}</style>
 			</div>
