@@ -5,17 +5,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import { Provider, connect } from 'react-redux';
 
 import reduxApi from '../lib/reduxApi'; // our redux-rest object
+import { connectWithStore } from '../lib/reduxHelper';
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 const reducer = combineReducers(reduxApi.reducers);
 const store = createStoreWithMiddleware(reducer);
 
-function mapStateToProps(state) {
-	return { kittens: state.kittens };
-}
+const mapStateToProps = (state) => ({ kittens: state.kittens });
 
 class IndexPage extends React.Component {
 
@@ -65,7 +63,7 @@ class IndexPage extends React.Component {
 		};
 
 		const afterRestRequest = function (err, results) {
-			console.log('PUT 2', err, results, this);
+			console.log('PUT 2', err, results);
 		};
 
 		console.log('PUT 1', index, kittenId, JSON.stringify(newKitten));
@@ -75,7 +73,7 @@ class IndexPage extends React.Component {
 	handleDelete (index, kittenId, event) {
 
 		const afterRestRequest = function (err, results) {
-			console.log('DELETE 2', err, results, this);
+			console.log('DELETE 2', err, results);
 		};
 
 		console.log('DELETE 1', index, kittenId);
@@ -142,14 +140,5 @@ class IndexPage extends React.Component {
 
 }
 
-// From https://github.com/reactjs/react-redux/issues/390#issuecomment-221389608
-function connectWithStore(store, WrappedComponent, ...args) {
-	var ConnectedWrappedComponent = connect(...args)(WrappedComponent)
-	return function (props) {
-		return <ConnectedWrappedComponent {...props} store={store} />
-	}
-}
-
 const IndexPageConnected = connectWithStore(store, IndexPage, mapStateToProps);
-
 export default IndexPageConnected;
