@@ -48,36 +48,18 @@ class IndexPage extends React.Component {
 		const newKitten = {
 			name: this.state.name,
 		};
-
-		const afterRestRequest = function (err, results) {
-			console.log('POST 2', err, results);
-		};
-
-		console.log('POST 1', JSON.stringify(newKitten));
-		this.props.dispatch(reduxApi.actions.kittens.post({}, { body: JSON.stringify(newKitten) }, afterRestRequest));
+		this.props.dispatch(reduxApi.actions.kittens.post({}, { body: JSON.stringify(newKitten) }, /*callbackWhenDone*/));
 	}
 
 	handleUpdate (index, kittenId, event) {
 		const newKitten = {
 			name: prompt('New kitten name?'),
 		};
-
-		const afterRestRequest = function (err, results) {
-			console.log('PUT 2', err, results);
-		};
-
-		console.log('PUT 1', index, kittenId, JSON.stringify(newKitten));
-		this.props.dispatch(reduxApi.actions.kittens.put({ id: kittenId }, { body: JSON.stringify(newKitten) }, afterRestRequest));
+		this.props.dispatch(reduxApi.actions.kittens.put({ id: kittenId }, { body: JSON.stringify(newKitten) }));
 	}
 
 	handleDelete (index, kittenId, event) {
-
-		const afterRestRequest = function (err, results) {
-			console.log('DELETE 2', err, results);
-		};
-
-		console.log('DELETE 1', index, kittenId);
-		this.props.dispatch(reduxApi.actions.kittens.delete({ id: kittenId }, afterRestRequest));
+		this.props.dispatch(reduxApi.actions.kittens.delete({ id: kittenId }));
 	}
 
 	componentDidMount() {
@@ -121,6 +103,7 @@ class IndexPage extends React.Component {
 				<title>Next.js (React) + Express REST API + MongoDB + Mongoose-Crudify boilerplate</title>
 				<meta name="description" content="Demo of nextjs-express-mongoose-crudify-boilerplate"/>
 				<meta charSet="utf-8"/>
+				<meta httpEquiv="content-language" content="en"/>
 				<meta name="viewport" content="initial-scale=1.0, width=device-width"/>
 				<link rel="stylesheet" href="/static/app.css"/>
 			</Head>

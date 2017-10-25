@@ -1,6 +1,6 @@
 {
   "name": "nextjs-express-mongoose-crudify-boilerplate",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Next.js with Express boilerplate and Mongoose CRUD support",
   "now": {
     "name": "nextjs-express-mongoose-crudify-boilerplate",
@@ -19,6 +19,7 @@
     "express": "^4.14.0",
     "glob": "^7.1.2",
     "isomorphic-unfetch": "^2.0.0",
+    "lodash": "^4.17.4",
     "mongoose": "^4.7.6",
     "mongoose-crudify": "^0.2.0",
     "next": "^4.1.0",
