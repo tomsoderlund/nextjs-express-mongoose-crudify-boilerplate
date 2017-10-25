@@ -1,20 +1,38 @@
 import fetch from 'isomorphic-unfetch'
 import Head from 'next/head'
 
-export default class IndexPage extends React.Component {
+import React from 'react';
+import PropTypes from 'prop-types';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import thunk from 'redux-thunk';
 
-	static async getInitialProps ({req, res, query}) {
-		try {
-			const protocol = req.headers['x-forwarded-proto'] || 'http';
-			const baseUrl = req ? `${protocol}://${req.headers.host}` : '';
-			const url = `${baseUrl}/api/kittens`;
-			const response = await fetch(url);
-			const kittensJson = await response.json();
-			return { apiUrl: url, kittens: kittensJson };
-		}
-		catch (err) {
-			return { error: 'Could not load kittens' }
-		}
+import reduxApi from '../lib/reduxApi'; // our redux-rest object
+import { connectWithStore } from '../lib/reduxHelper';
+
+const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const reducer = combineReducers(reduxApi.reducers);
+const store = createStoreWithMiddleware(reducer);
+
+const mapStateToProps = (state) => ({ kittens: state.kittens });
+
+class IndexPage extends React.Component {
+
+	static propTypes = {
+
+		// oneKitten: PropTypes.shape({
+		// 	loading: PropTypes.bool.isRequired,
+		// 	data: PropTypes.shape({
+		// 		text: PropTypes.string
+		// 	}).isRequired
+		// }).isRequired,
+
+		kittens: PropTypes.shape({
+			loading: PropTypes.bool.isRequired,
+			data: PropTypes.array.isRequired
+		}).isRequired,
+
+		dispatch: PropTypes.func.isRequired
+
 	};
 
 	constructor (props) {
@@ -30,51 +48,51 @@ export default class IndexPage extends React.Component {
 		const newKitten = {
 			name: this.state.name,
 		};
-		const updateLocalKittenState = function (results) {
-			console.log('POST', results);
-			this.setState({ name: '', kittens: this.state.kittens.concat(newKitten) });
+		this.props.dispatch(reduxApi.actions.kittens.post({}, { body: JSON.stringify(newKitten) }, /*callbackWhenDone*/));
+	}
+
+	handleUpdate (index, kittenId, event) {
+		const newKitten = {
+			name: prompt('New kitten name?'),
 		};
-		// POST on API
-		fetch(this.props.apiUrl, {
-			method: 'POST',
-			body: JSON.stringify(newKitten),
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-			},
-		})
-		.then(updateLocalKittenState.bind(this))
-		.catch(err => console.error('POST error', err));			
+		this.props.dispatch(reduxApi.actions.kittens.put({ id: kittenId }, { body: JSON.stringify(newKitten) }));
 	}
 
 	handleDelete (index, kittenId, event) {
-		const updateLocalKittenState = function (results) {
-			console.log('DELETE', results);
-			this.setState({ kittens: this.state.kittens.filter(function (kitten) { return kitten._id !== kittenId }) });
-		};
-		// DELETE on API
-		fetch(this.props.apiUrl + '/' + kittenId, {
-			method: 'DELETE',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-			},
-		})
-		.then(updateLocalKittenState.bind(this))
-		.catch(err => console.error('DELETE error', err));
+		this.props.dispatch(reduxApi.actions.kittens.delete({ id: kittenId }));
+	}
+
+	componentDidMount() {
+		const {dispatch} = this.props;
+
+		// Specify id for GET: /api/kittens/59c9743888a7e95e93c3bbea
+		//dispatch(reduxApi.actions.oneKitten({ id: '59c9743888a7e95e93c3bbea' }));
+
+		// Fetch all /api/kittens
+		dispatch(reduxApi.actions.kittens.sync());
 	}
 
 	render () {
 
-		const kittenList = this.state.kittens ? this.state.kittens.map((kitten, index) =>
+		const {kittens} = this.props;
+
+		const kittenList = kittens.data ? kittens.data.map((kitten, index) =>
 			<div key={index}>
 				{kitten.name} 
-				<a onClick={this.handleDelete.bind(this, index, kitten._id)}>x</a>
+				<a className="update" onClick={this.handleUpdate.bind(this, index, kitten._id)}>Update</a>
+				<a className="delete" onClick={this.handleDelete.bind(this, index, kitten._id)}>Delete</a>
 				<style jsx>{`
 					a {
-						color: tomato;
 						margin-left: 0.5em;
 						cursor: pointer;
+						font-size: 0.6em;
+						text-transform: uppercase;
+					}
+					a.update {
+						color: lime;
+					}
+					a.delete {
+						color: tomato;
 					}
 				`}</style>
 			</div>
@@ -85,6 +103,7 @@ export default class IndexPage extends React.Component {
 				<title>Next.js (React) + Express REST API + MongoDB + Mongoose-Crudify boilerplate</title>
 				<meta name="description" content="Demo of nextjs-express-mongoose-crudify-boilerplate"/>
 				<meta charSet="utf-8"/>
+				<meta httpEquiv="content-language" content="en"/>
 				<meta name="viewport" content="initial-scale=1.0, width=device-width"/>
 				<link rel="stylesheet" href="/static/app.css"/>
 			</Head>
@@ -103,3 +122,6 @@ export default class IndexPage extends React.Component {
 	};
 
 }
+
+const IndexPageConnected = connectWithStore(store, IndexPage, mapStateToProps);
+export default IndexPageConnected;
