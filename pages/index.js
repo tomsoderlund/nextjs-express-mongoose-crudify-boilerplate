@@ -7,7 +7,7 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 
 import reduxApi from '../lib/reduxApi'; // our redux-rest object
-import { connectWithStore } from '../lib/reduxHelper';
+import { connectComponentWithStore } from '../lib/reduxApi';
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 const reducer = combineReducers(reduxApi.reducers);
@@ -141,5 +141,5 @@ class IndexPage extends React.Component {
 
 }
 
-const IndexPageConnected = connectWithStore(store, IndexPage, mapStateToProps);
+const IndexPageConnected = connectComponentWithStore(IndexPage, store, mapStateToProps);
 export default IndexPageConnected;
