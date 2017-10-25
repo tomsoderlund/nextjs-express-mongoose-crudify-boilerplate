@@ -15,6 +15,8 @@ const store = createStoreWithMiddleware(reducer);
 
 const mapStateToProps = (state) => ({ kittens: state.kittens });
 
+import KittenItem from '../components/KittenItem';
+
 class IndexPage extends React.Component {
 
 	static propTypes = {
@@ -91,30 +93,9 @@ class IndexPage extends React.Component {
 
 		const {kittens} = this.props;
 
-		const kittenList = kittens.data ? kittens.data.map((kitten, index) =>
-			<div key={index} className={this.state.inProgress === kitten._id ? 'inProgress' : ''}>
-				{kitten.name} 
-				<a className="update" onClick={this.handleUpdate.bind(this, index, kitten._id)}>Update</a>
-				<a className="delete" onClick={this.handleDelete.bind(this, index, kitten._id)}>Delete</a>
-				<style jsx>{`
-					a {
-						margin-left: 0.5em;
-						cursor: pointer;
-						font-size: 0.6em;
-						text-transform: uppercase;
-					}
-					a.update {
-						color: lime;
-					}
-					a.delete {
-						color: tomato;
-					}
-					.inProgress {
-						opacity: 0.3;
-					}
-				`}</style>
-			</div>
-		) : [];
+		const kittenList = kittens.data
+			? kittens.data.map((kitten, index) => <KittenItem kitten={kitten} index={index} key={index} inProgress={this.state.inProgress} handleUpdate={this.handleUpdate.bind(this)} handleDelete={this.handleDelete.bind(this)}/>)
+			: [];
 
 		return <div>
 			<Head>
