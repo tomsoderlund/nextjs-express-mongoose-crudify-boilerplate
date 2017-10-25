@@ -44,24 +44,6 @@ class IndexPage extends React.Component {
 		this.setState({ name: event.target.value });
 	}
 
-	handleAdd (event) {
-		const newKitten = {
-			name: this.state.name,
-		};
-		this.props.dispatch(reduxApi.actions.kittens.post({}, { body: JSON.stringify(newKitten) }, /*callbackWhenDone*/));
-	}
-
-	handleUpdate (index, kittenId, event) {
-		const newKitten = {
-			name: prompt('New kitten name?'),
-		};
-		this.props.dispatch(reduxApi.actions.kittens.put({ id: kittenId }, { body: JSON.stringify(newKitten) }));
-	}
-
-	handleDelete (index, kittenId, event) {
-		this.props.dispatch(reduxApi.actions.kittens.delete({ id: kittenId }));
-	}
-
 	componentDidMount() {
 		const {dispatch} = this.props;
 
@@ -72,12 +54,45 @@ class IndexPage extends React.Component {
 		dispatch(reduxApi.actions.kittens.sync());
 	}
 
+	handleAdd (event) {
+		// Progress indicator
+		this.setState({ inProgress: true });
+		const callbackWhenDone = () => this.setState({ name: '', inProgress: null });
+
+		// Actual data request
+		const newKitten = {
+			name: this.state.name,
+		};
+		this.props.dispatch(reduxApi.actions.kittens.post({}, { body: JSON.stringify(newKitten) }, callbackWhenDone));
+	}
+
+	handleUpdate (index, kittenId, event) {
+		// Progress indicator
+		this.setState({ inProgress: kittenId });
+		const callbackWhenDone = () => this.setState({ inProgress: null });
+
+		// Actual data request
+		const newKitten = {
+			name: prompt('New name?'),
+		};
+		this.props.dispatch(reduxApi.actions.kittens.put({ id: kittenId }, { body: JSON.stringify(newKitten) }, callbackWhenDone));
+	}
+
+	handleDelete (index, kittenId, event) {
+		// Progress indicator
+		this.setState({ inProgress: kittenId });
+		const callbackWhenDone = () => this.setState({ inProgress: null });
+
+		// Actual data request
+		this.props.dispatch(reduxApi.actions.kittens.delete({ id: kittenId }, callbackWhenDone));
+	}
+
 	render () {
 
 		const {kittens} = this.props;
 
 		const kittenList = kittens.data ? kittens.data.map((kitten, index) =>
-			<div key={index}>
+			<div key={index} className={this.state.inProgress === kitten._id ? 'inProgress' : ''}>
 				{kitten.name} 
 				<a className="update" onClick={this.handleUpdate.bind(this, index, kitten._id)}>Update</a>
 				<a className="delete" onClick={this.handleDelete.bind(this, index, kitten._id)}>Delete</a>
@@ -93,6 +108,9 @@ class IndexPage extends React.Component {
 					}
 					a.delete {
 						color: tomato;
+					}
+					.inProgress {
+						opacity: 0.3;
 					}
 				`}</style>
 			</div>
@@ -110,8 +128,8 @@ class IndexPage extends React.Component {
 			<h1>Kittens</h1>
 			{kittenList}
 			<div>
-				<input value={this.state.name} onChange={this.handleChange.bind(this)} placeholder='Enter a kitten name'/>
-				<button onClick={this.handleAdd.bind(this)}>Add kitten</button>
+				<input placeholder='Enter a kitten name' value={this.state.name} onChange={this.handleChange.bind(this)} disabled={this.state.inProgress}/>
+				<button onClick={this.handleAdd.bind(this)} disabled={this.state.inProgress}>Add kitten</button>
 				<style jsx>{`
 					div {
 						margin-top: 1em;

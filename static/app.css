@@ -31,7 +31,7 @@ button {
 	margin: 0.2em;
 	transition: all 0.2s;
 }
-button:hover {
+button:hover:not(:disabled) {
 	opacity: 0.8;
 	transition: box-shadow 0s;
 }
@@ -39,6 +39,9 @@ button:active {
 	margin-top: 0.3em;
 	margin-bottom: 0.1em;
 	box-shadow: 0 0.5px 0.125em rgba(0,0,0, 0.4);
+}
+button:disabled {
+	background-color: silver;
 }
 
 /* Nice & simple: Input and Dropdown Menu - http://codepen.io/tomsoderlund/pen/GNBbWz */
@@ -58,13 +61,18 @@ select {
 	padding: 0.6em;
 	margin: 0.2em;
 }
-input:hover,
-textarea:hover,
-select:hover {
+input:hover:not(:disabled),
+textarea:hover:not(:disabled),
+select:hover:not(:disabled) {
 	border-color: silver;
 }
 input:focus,
 textarea:focus,
 select:focus {
 	border-color: darkgray;
+}
+input:disabled,
+textarea:disabled,
+select:disabled {
+	background-color: whitesmoke;
 }
