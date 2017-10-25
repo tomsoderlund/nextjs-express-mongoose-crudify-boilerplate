@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-unfetch'
-import Head from 'next/head'
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -15,6 +14,7 @@ const store = createStoreWithMiddleware(reducer);
 
 const mapStateToProps = (state) => ({ kittens: state.kittens });
 
+import PageHead from '../components/PageHead';
 import KittenItem from '../components/KittenItem';
 
 class IndexPage extends React.Component {
@@ -98,15 +98,13 @@ class IndexPage extends React.Component {
 			: [];
 
 		return <div>
-			<Head>
-				<title>Next.js (React) + Express REST API + MongoDB + Mongoose-Crudify boilerplate</title>
-				<meta name="description" content="Demo of nextjs-express-mongoose-crudify-boilerplate"/>
-				<meta charSet="utf-8"/>
-				<meta httpEquiv="content-language" content="en"/>
-				<meta name="viewport" content="initial-scale=1.0, width=device-width"/>
-				<link rel="stylesheet" href="/static/app.css"/>
-			</Head>
+			<PageHead
+				title='Next.js (React) + Express REST API + MongoDB + Mongoose-Crudify boilerplate'
+				description='Demo of nextjs-express-mongoose-crudify-boilerplate'
+			/>
+
 			<h1>Kittens</h1>
+
 			{kittenList}
 			<div>
 				<input placeholder='Enter a kitten name' value={this.state.name} onChange={this.handleChange.bind(this)} disabled={this.state.inProgress}/>
@@ -117,6 +115,7 @@ class IndexPage extends React.Component {
 					}
 				`}</style>
 			</div>
+
 		</div>
 	};
 
