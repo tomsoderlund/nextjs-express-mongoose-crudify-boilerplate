@@ -7,9 +7,10 @@ const glob = require('glob');
 const next = require('next')
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
-const handle = app.getRequestHandler()
+const defaultRequestHandler = app.getRequestHandler()
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/nextjs-express-boilerplate'
+const LOCAL_DB = 'nextjs-express-boilerplate'
+const MONGODB_URI = process.env.MONGODB_URI || `mongodb://localhost/${LOCAL_DB}`
 const PORT = process.env.PORT || 3001
 
 app.prepare().then(() => {
@@ -35,10 +36,16 @@ app.prepare().then(() => {
 	const rootPath = require('path').normalize(__dirname + '/..');
 	glob.sync(rootPath + '/server/routes/*.js').forEach(controllerPath => require(controllerPath)(server));
 
-	// Next.js route
-	server.get('*', (req, res) => {
-		return handle(req, res)
-	})
+	// Next.js request handling
+	const customRequestHandler = (page, req, res) => {
+		const mergedQuery = Object.assign({}, req.query, req.params);
+		app.render(req, res, page, mergedQuery);
+	}
+
+	// Routes
+	//server.get('/custom', customRequestHandler.bind(undefined, '/custom-page'));
+	server.get('/', customRequestHandler.bind(undefined, '/'));
+	server.get('*', defaultRequestHandler);
 
 	server.listen(PORT, function () {
 		console.log(`App running on http://localhost:${PORT}/\nAPI running on http://localhost:${PORT}/api/kittens`)
