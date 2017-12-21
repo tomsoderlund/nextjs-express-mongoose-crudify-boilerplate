@@ -1,23 +1,15 @@
-import fetch from 'isomorphic-unfetch'
-
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import { createStore, applyMiddleware, combineReducers } from 'redux';
-import thunk from 'redux-thunk';
-
-import reduxApi from '../lib/reduxApi'; // our redux-rest object
-import { connectComponentWithStore } from '../lib/reduxApi';
-
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-const reducer = combineReducers(reduxApi.reducers);
-const store = createStoreWithMiddleware(reducer);
-
-const mapStateToProps = (state) => ({ kittens: state.kittens });
+import thunkMiddleware from 'redux-thunk';
+import withRedux from 'next-redux-wrapper';
+import reduxApi from '../lib/reduxApi';
 
 import PageHead from '../components/PageHead';
 import KittenItem from '../components/KittenItem';
 
-class IndexPage extends React.Component {
+class IndexPage extends Component {
 
 	static propTypes = {
 
@@ -37,23 +29,20 @@ class IndexPage extends React.Component {
 
 	};
 
+	static async getInitialProps ({store, isServer, pathname, query}) {
+		const { dispatch } = store;
+		// Get all Kittens
+		const resultPromise = await dispatch(reduxApi.actions.kittens.sync());
+		return resultPromise;
+	}
+
 	constructor (props) {
 		super(props)
-		this.state = { name: '', kittens: props.kittens }
+		this.state = { name: '' }
 	}
 
-	handleChange (event) {
+	handleChangeInputText (event) {
 		this.setState({ name: event.target.value });
-	}
-
-	componentDidMount() {
-		const {dispatch} = this.props;
-
-		// Specify id for GET: /api/kittens/59c9743888a7e95e93c3bbea
-		//dispatch(reduxApi.actions.oneKitten({ id: '59c9743888a7e95e93c3bbea' }));
-
-		// Fetch all /api/kittens
-		dispatch(reduxApi.actions.kittens.sync());
 	}
 
 	handleAdd (event) {
@@ -91,10 +80,17 @@ class IndexPage extends React.Component {
 
 	render () {
 
-		const {kittens} = this.props;
+		const {kittens} = this.props;//dd
 
 		const kittenList = kittens.data
-			? kittens.data.map((kitten, index) => <KittenItem kitten={kitten} index={index} key={index} inProgress={this.state.inProgress} handleUpdate={this.handleUpdate.bind(this)} handleDelete={this.handleDelete.bind(this)}/>)
+			? kittens.data.map((kitten, index) => <KittenItem
+													key={index}
+													kitten={kitten}
+													index={index}
+													inProgress={this.state.inProgress}
+													handleUpdate={this.handleUpdate.bind(this)}
+													handleDelete={this.handleDelete.bind(this)}
+													/>)
 			: [];
 
 		return <div>
@@ -107,7 +103,7 @@ class IndexPage extends React.Component {
 
 			{kittenList}
 			<div>
-				<input placeholder='Enter a kitten name' value={this.state.name} onChange={this.handleChange.bind(this)} disabled={this.state.inProgress}/>
+				<input placeholder='Enter a kitten name' value={this.state.name} onChange={this.handleChangeInputText.bind(this)} disabled={this.state.inProgress}/>
 				<button onClick={this.handleAdd.bind(this)} disabled={this.state.inProgress}>Add kitten</button>
 				<style jsx>{`
 					div {
@@ -121,5 +117,9 @@ class IndexPage extends React.Component {
 
 }
 
-const IndexPageConnected = connectComponentWithStore(IndexPage, store, mapStateToProps);
+const createStoreWithThunkMiddleware = applyMiddleware(thunkMiddleware)(createStore);
+const makeStore = (state, enhancer) => createStoreWithThunkMiddleware(combineReducers(reduxApi.reducers), state);
+const mapStateToProps = (state) => ({ kittens: state.kittens });
+
+const IndexPageConnected = withRedux({ createStore: makeStore, mapStateToProps })(IndexPage)
 export default IndexPageConnected;

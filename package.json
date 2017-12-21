@@ -1,6 +1,6 @@
 {
   "name": "nextjs-express-mongoose-crudify-boilerplate",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Next.js with Express boilerplate and Mongoose CRUD support",
   "now": {
     "name": "nextjs-express-mongoose-crudify-boilerplate",
@@ -23,6 +23,7 @@
     "mongoose": "^4.7.6",
     "mongoose-crudify": "^0.2.0",
     "next": "^4.1.0",
+    "next-redux-wrapper": "^1.3.5",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
