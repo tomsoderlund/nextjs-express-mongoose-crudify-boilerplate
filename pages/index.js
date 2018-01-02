@@ -30,9 +30,8 @@ class IndexPage extends Component {
 	};
 
 	static async getInitialProps ({store, isServer, pathname, query}) {
-		const { dispatch } = store;
 		// Get all Kittens
-		const kittens = await dispatch(reduxApi.actions.kittens.sync());
+		const kittens = await store.dispatch(reduxApi.actions.kittens.sync());
 		return { kittens };
 	}
 
