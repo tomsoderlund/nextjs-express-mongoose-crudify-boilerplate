@@ -16,6 +16,7 @@ module.exports = function (server, router) {
 		'/api/kittens',
 		mongooseCrudify({
 			Model: Kitten,
+			selectFields: '-__v', // Hide '__v' property
 			endResponseInAction: false,
 			afterActions: [
 				{ middlewares: [formatResponse] },
