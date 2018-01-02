@@ -38,9 +38,10 @@ app.prepare().then(() => {
 
 	// Next.js request handling
 	const customRequestHandler = (page, req, res) => {
+		// Both query and params will be available in getInitialProps({query})
 		const mergedQuery = Object.assign({}, req.query, req.params);
 		app.render(req, res, page, mergedQuery);
-	}
+	};
 
 	// Routes
 	//server.get('/custom', customRequestHandler.bind(undefined, '/custom-page'));
