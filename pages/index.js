@@ -118,8 +118,8 @@ class IndexPage extends Component {
 }
 
 const createStoreWithThunkMiddleware = applyMiddleware(thunkMiddleware)(createStore);
-const makeStore = (state, enhancer) => createStoreWithThunkMiddleware(combineReducers(reduxApi.reducers), state);
-const mapStateToProps = (state) => ({ kittens: state.kittens }); // Use reduxApi endpoint names here
+const makeStore = (reduxState, enhancer) => createStoreWithThunkMiddleware(combineReducers(reduxApi.reducers), reduxState);
+const mapStateToProps = (reduxState) => ({ kittens: reduxState.kittens }); // Use reduxApi endpoint names here
 
 const IndexPageConnected = withRedux({ createStore: makeStore, mapStateToProps })(IndexPage)
 export default IndexPageConnected;
