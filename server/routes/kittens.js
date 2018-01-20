@@ -2,12 +2,8 @@
 
 const mongooseCrudify = require('mongoose-crudify');
 
+const helpers = require('../services/helpers');
 const Kitten = require('../models/kitten');
-
-// Since DELETE doesn't return the _id of deleted item by default
-const formatResponse = function (req, res, next) {
-	return res.json(req.crudify.err || (req.method === 'DELETE' ? req.params : req.crudify.result));
-};
 
 module.exports = function (server) {
 
@@ -19,7 +15,7 @@ module.exports = function (server) {
 			selectFields: '-__v', // Hide '__v' property
 			endResponseInAction: false,
 			afterActions: [
-				{ middlewares: [formatResponse] },
+				{ middlewares: [helpers.formatResponse] },
 			],
 		})
 	);
