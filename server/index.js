@@ -28,6 +28,7 @@ app.prepare().then(() => {
 	});
 
 	// MongoDB
+	mongoose.Promise = Promise;
 	mongoose.connect(MONGODB_URI, { useMongoClient: true });
 	const db = mongoose.connection;
 	db.on('error', console.error.bind(console, 'connection error:'));
