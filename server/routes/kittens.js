@@ -9,7 +9,7 @@ const formatResponse = function (req, res, next) {
 	return res.json(req.crudify.err || (req.method === 'DELETE' ? req.params : req.crudify.result));
 };
 
-module.exports = function (server, router) {
+module.exports = function (server) {
 
 	// Docs: https://github.com/ryo718/mongoose-crudify
 	server.use(
