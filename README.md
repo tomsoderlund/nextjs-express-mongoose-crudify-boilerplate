@@ -24,7 +24,7 @@ Clone this repository:
 Install dependencies:
 
 	cd [MY_APP]
-	npm install  # or yarn install
+	yarn  # or npm install
 
 Start it by doing the following:
 
