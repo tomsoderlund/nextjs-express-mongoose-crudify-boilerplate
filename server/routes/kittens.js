@@ -14,6 +14,9 @@ module.exports = function (server) {
 			Model: Kitten,
 			selectFields: '-__v', // Hide '__v' property
 			endResponseInAction: false,
+
+			// beforeActions: [],
+			// actions: {}, // list (GET), create (POST), read (GET), update (PUT), delete (DELETE)
 			afterActions: [
 				{ middlewares: [helpers.formatResponse] },
 			],
