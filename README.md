@@ -1,6 +1,6 @@
 # Next.js (React) + Redux + Express REST API + MongoDB + Mongoose-Crudify boilerplate
 
-_You want an SQL database instead of MongoDB? Check out https://github.com/tomsoderlund/nextjs-sql-rest-api-boilerplate instead._
+_You want an SQL database instead of MongoDB? Check out [nextjs-sql-rest-api-boilerplate](https://github.com/tomsoderlund/nextjs-sql-rest-api-boilerplate) instead._
 
 Based on [nextjs-express-boilerplate](https://github.com/johhansantana/nextjs-express-boilerplate), but with added [mongoose-crudify](https://github.com/ryo718/mongoose-crudify) and [redux-api](https://github.com/lexich/redux-api).
 
@@ -31,12 +31,12 @@ Install dependencies:
 Start it by doing the following:
 
 	export MONGODB_URI=*your mongodb url* // you can get one for free at https://www.mlab.com/home
-	npm run dev
+	yarn dev
 
 In production:
 
-	npm run build
-	npm start
+	yarn build
+	yarn start
 
 If you navigate to `http://localhost:3001/` you will see a [Next.js](https://github.com/zeit/next.js) page with a list of kittens (or an empty list if you haven't added one).
 
