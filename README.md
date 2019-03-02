@@ -1,5 +1,7 @@
 # Next.js (React) + Redux + Express REST API + MongoDB + Mongoose-Crudify boilerplate
 
+_You want an SQL database instead of MongoDB? Check out https://github.com/tomsoderlund/nextjs-sql-rest-api-boilerplate instead._
+
 Based on [nextjs-express-boilerplate](https://github.com/johhansantana/nextjs-express-boilerplate), but with added [mongoose-crudify](https://github.com/ryo718/mongoose-crudify) and [redux-api](https://github.com/lexich/redux-api).
 
 **NOTE:** this project now uses Redux and [redux-api](https://github.com/lexich/redux-api). See the [no-redux](https://github.com/tomsoderlund/nextjs-express-mongoose-crudify-boilerplate/tree/no-redux) branch for the (unmaintained) version without Redux.
