@@ -1,13 +1,17 @@
+require('dotenv').config()
+
 const express = require('express')
 const server = express()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const glob = require('glob')
-
 const next = require('next')
+
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
-const defaultRequestHandler = app.getRequestHandler()
+
+const routes = require('./routes')
+const routerHandler = routes.getRequestHandler(app)
 
 const { config } = require('../config/config')
 
@@ -30,23 +34,15 @@ app.prepare().then(() => {
   const db = mongoose.connection
   db.on('error', console.error.bind(console, 'connection error:'))
 
-  // API routes
+  // REST API routes
   const rootPath = require('path').join(__dirname, '/..')
-  glob.sync(rootPath + '/server/api/*.js').forEach(controllerPath => require(controllerPath)(server))
-
-  // Next.js request handling
-  const customRequestHandler = (page, req, res) => {
-    // Both query and params will be available in getInitialProps({query})
-    const mergedQuery = Object.assign({}, req.query, req.params)
-    app.render(req, res, page, mergedQuery)
-  }
-
-  // Routes
-  // server.get('/custom', customRequestHandler.bind(undefined, '/custom-page'));
-  server.get('/', customRequestHandler.bind(undefined, '/'))
-  server.get('*', defaultRequestHandler)
-
-  server.listen(config.serverPort, function () {
-    console.log(`App running on http://localhost:${config.serverPort}/\nAPI running on http://localhost:${config.serverPort}/api/kittens`)
+  glob.sync(rootPath + '/server/api/*.js').forEach(controllerPath => {
+    if (!controllerPath.includes('.test.js')) require(controllerPath)(server)
   })
+
+  // Next.js page routes
+  server.get('*', routerHandler)
+
+  // Start server
+  server.listen(config.serverPort, () => console.log(`${config.appName} running on http://localhost:${config.serverPort}/`))
 })

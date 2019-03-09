@@ -2,6 +2,7 @@ import { Component } from 'react'
 
 import reduxApi, { withKittens } from '../redux/reduxApi.js'
 
+import { Link } from '../server/routes.js'
 import PageHead from '../components/PageHead'
 import KittenItem from '../components/KittenItem'
 
@@ -9,7 +10,7 @@ class IndexPage extends Component {
   static async getInitialProps ({ store, isServer, pathname, query }) {
     // Get all kittens
     const kittens = await store.dispatch(reduxApi.actions.kittens.sync())
-    return { kittens }
+    return { kittens, query }
   }
 
   constructor (props) {
@@ -62,7 +63,7 @@ class IndexPage extends Component {
       />)
       : []
 
-    return <div>
+    return <main>
       <PageHead
         title='Next.js (React) + Express REST API + MongoDB + Mongoose-Crudify boilerplate'
         description='Demo of nextjs-express-mongoose-crudify-boilerplate'
@@ -81,7 +82,14 @@ class IndexPage extends Component {
         `}</style>
       </div>
 
-    </div>
+      <h2>Routing</h2>
+      Current page slug: /{this.props.query.slug}
+      <ul>
+        <li><Link route='/about'><a>About</a></Link></li>
+        <li><Link route='/more/contact'><a>Contact</a></Link></li>
+      </ul>
+
+    </main>
   };
 }
 
