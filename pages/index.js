@@ -32,7 +32,7 @@ class IndexPage extends Component {
     this.props.dispatch(reduxApi.actions.kittens.post({}, { body: JSON.stringify(newKitten) }, callbackWhenDone))
   }
 
-  handleUpdate (index, kittenId, event) {
+  handleUpdate (kitten, index, kittenId, event) {
     const name = window.prompt('New name?', kitten.name)
     if (!name) return
     const callbackWhenDone = () => this.setState({ inProgress: false })
