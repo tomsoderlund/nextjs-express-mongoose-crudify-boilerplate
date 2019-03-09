@@ -32,7 +32,7 @@ app.prepare().then(() => {
 
   // API routes
   const rootPath = require('path').join(__dirname, '/..')
-  glob.sync(rootPath + '/server/routes/*.js').forEach(controllerPath => require(controllerPath)(server))
+  glob.sync(rootPath + '/server/api/*.js').forEach(controllerPath => require(controllerPath)(server))
 
   // Next.js request handling
   const customRequestHandler = (page, req, res) => {
