@@ -4,18 +4,29 @@ _You want an SQL database instead of MongoDB? Check out [nextjs-sql-rest-api-boi
 
 Based on [nextjs-express-boilerplate](https://github.com/johhansantana/nextjs-express-boilerplate), but with added [mongoose-crudify](https://github.com/ryo718/mongoose-crudify) and [redux-api](https://github.com/lexich/redux-api).
 
-**NOTE:** this project now uses Redux and [redux-api](https://github.com/lexich/redux-api). See the [no-redux](https://github.com/tomsoderlund/nextjs-express-mongoose-crudify-boilerplate/tree/no-redux) branch for the (unmaintained) version without Redux.
-
 ## Why is this awesome?
 
 This is a great starting point for a any project where you want **React + Redux** (with server-side rendering, powered by [Next.js](https://github.com/zeit/next.js)) as frontend and **Express/MongoDB** as a REST API backend.
-Lightning fast, all JavaScript.
+_Lightning fast, all JavaScript._
+
+* Simple REST API routes with MongoDB database and `mongoose-crudify`.
+* Redux REST support with `redux-api` and `next-redux-wrapper`.
+* Flexible client-side routing with `next-routes` (see `server/routes.js`).
+* Flexible configuration with `config/config.js` and `.env` file.
+* Hot reloading with `nodemon`.
+* Testing with Jasmine.
+* Code formatting and linting with StandardJS.
+* JWT authentication for client-server communication (coming).
 
 ## Demo
 
 See [**nextjs-express-mongoose-crudify-boilerplate** running on Heroku here](https://nextjs-express-mongoose.herokuapp.com/).
 
 ![nextjs-express-mongoose-crudify-boilerplate demo on Heroku](docs/kittens-demo.gif)
+
+## Don’t want Redux?
+
+This project now uses Redux and [redux-api](https://github.com/lexich/redux-api). See the [no-redux](https://github.com/tomsoderlund/nextjs-express-mongoose-crudify-boilerplate/tree/no-redux) branch for the (unmaintained) version without Redux.
 
 ## How to use
 

@@ -1,10 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import withRedux from 'next-redux-wrapper';
-import reduxApi from '../lib/reduxApi';
+import reduxApi, { withKittens } from '../redux/reduxApi.js'
 
 import PageHead from '../components/PageHead';
 import KittenItem from '../components/KittenItem';
@@ -44,38 +41,32 @@ class IndexPage extends Component {
 		this.setState({ name: event.target.value });
 	}
 
-	handleAdd (event) {
-		// Progress indicator
-		this.setState({ inProgress: true });
-		const callbackWhenDone = () => this.setState({ name: '', inProgress: null });
+  handleAdd (event) {
+    const { name } = this.state
+    if (!name) return
+    const callbackWhenDone = () => this.setState({ name: '', inProgress: false })
+    this.setState({ inProgress: true })
+    // Actual data request
+    const newKitten = { name }
+    this.props.dispatch(reduxApi.actions.kittens.post({}, { body: JSON.stringify(newKitten) }, callbackWhenDone))
+  }
 
-		// Actual data request
-		const newKitten = {
-			name: this.state.name,
-		};
-		this.props.dispatch(reduxApi.actions.kittens.post({}, { body: JSON.stringify(newKitten) }, callbackWhenDone));
-	}
+  handleUpdate (index, kittenId, event) {
+    const name = window.prompt('New name?')
+    if (!name) return
+    const callbackWhenDone = () => this.setState({ inProgress: false })
+    this.setState({ inProgress: kittenId })
+    // Actual data request
+    const newKitten = { id: kittenId, name }
+    this.props.dispatch(reduxApi.actions.kittens.put({ id: kittenId }, { body: JSON.stringify(newKitten) }, callbackWhenDone))
+  }
 
-	handleUpdate (index, kittenId, event) {
-		// Progress indicator
-		this.setState({ inProgress: kittenId });
-		const callbackWhenDone = () => this.setState({ inProgress: null });
-
-		// Actual data request
-		const newKitten = {
-			name: prompt('New name?'),
-		};
-		this.props.dispatch(reduxApi.actions.kittens.put({ id: kittenId }, { body: JSON.stringify(newKitten) }, callbackWhenDone));
-	}
-
-	handleDelete (index, kittenId, event) {
-		// Progress indicator
-		this.setState({ inProgress: kittenId });
-		const callbackWhenDone = () => this.setState({ inProgress: null });
-
-		// Actual data request
-		this.props.dispatch(reduxApi.actions.kittens.delete({ id: kittenId }, callbackWhenDone));
-	}
+  handleDelete (index, kittenId, event) {
+    const callbackWhenDone = () => this.setState({ inProgress: false })
+    this.setState({ inProgress: kittenId })
+    // Actual data request
+    this.props.dispatch(reduxApi.actions.kittens.delete({ id: kittenId }, callbackWhenDone))
+  }
 
 	render () {
 
@@ -116,9 +107,4 @@ class IndexPage extends Component {
 
 }
 
-const createStoreWithThunkMiddleware = applyMiddleware(thunkMiddleware)(createStore);
-const makeStore = (reduxState, enhancer) => createStoreWithThunkMiddleware(combineReducers(reduxApi.reducers), reduxState);
-const mapStateToProps = (reduxState) => ({ kittens: reduxState.kittens }); // Use reduxApi endpoint names here
-
-const IndexPageConnected = withRedux({ createStore: makeStore, mapStateToProps })(IndexPage)
-export default IndexPageConnected;
+export default withKittens(IndexPage);

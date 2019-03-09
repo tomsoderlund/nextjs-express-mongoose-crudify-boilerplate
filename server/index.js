@@ -9,9 +9,7 @@ const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const defaultRequestHandler = app.getRequestHandler()
 
-const LOCAL_DB = 'nextjs-express-boilerplate'
-const MONGODB_URI = process.env.MONGODB_URI || `mongodb://localhost/${LOCAL_DB}`
-const PORT = process.env.PORT || 3001
+const { config } = require('../config/config')
 
 app.prepare().then(() => {
 
@@ -29,7 +27,7 @@ app.prepare().then(() => {
 
 	// MongoDB
 	mongoose.Promise = Promise;
-	mongoose.connect(MONGODB_URI, { useMongoClient: true });
+	mongoose.connect(config.databaseUrl, { useMongoClient: true });
 	const db = mongoose.connection;
 	db.on('error', console.error.bind(console, 'connection error:'));
 
@@ -49,8 +47,8 @@ app.prepare().then(() => {
 	server.get('/', customRequestHandler.bind(undefined, '/'));
 	server.get('*', defaultRequestHandler);
 
-	server.listen(PORT, function () {
-		console.log(`App running on http://localhost:${PORT}/\nAPI running on http://localhost:${PORT}/api/kittens`)
+	server.listen(config.serverPort, function () {
+		console.log(`App running on http://localhost:${config.serverPort}/\nAPI running on http://localhost:${config.serverPort}/api/kittens`)
 	});
 
 })
