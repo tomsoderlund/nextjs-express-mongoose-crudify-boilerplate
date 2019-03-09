@@ -33,7 +33,7 @@ class IndexPage extends Component {
   }
 
   handleUpdate (index, kittenId, event) {
-    const name = window.prompt('New name?')
+    const name = window.prompt('New name?', kitten.name)
     if (!name) return
     const callbackWhenDone = () => this.setState({ inProgress: false })
     this.setState({ inProgress: kittenId })
@@ -58,7 +58,7 @@ class IndexPage extends Component {
         kitten={kitten}
         index={index}
         inProgress={this.state.inProgress}
-        handleUpdate={this.handleUpdate.bind(this)}
+        handleUpdate={this.handleUpdate.bind(this, kitten)}
         handleDelete={this.handleDelete.bind(this)}
       />)
       : []
