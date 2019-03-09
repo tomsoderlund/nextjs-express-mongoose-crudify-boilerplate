@@ -1,45 +1,25 @@
-import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { Component } from 'react'
 
 import reduxApi, { withKittens } from '../redux/reduxApi.js'
 
-import PageHead from '../components/PageHead';
-import KittenItem from '../components/KittenItem';
+import PageHead from '../components/PageHead'
+import KittenItem from '../components/KittenItem'
 
 class IndexPage extends Component {
+  static async getInitialProps ({ store, isServer, pathname, query }) {
+    // Get all kittens
+    const kittens = await store.dispatch(reduxApi.actions.kittens.sync())
+    return { kittens }
+  }
 
-	static propTypes = {
+  constructor (props) {
+    super(props)
+    this.state = { name: '' }
+  }
 
-		// oneKitten: PropTypes.shape({
-		// 	loading: PropTypes.bool.isRequired,
-		// 	data: PropTypes.shape({
-		// 		text: PropTypes.string
-		// 	}).isRequired
-		// }).isRequired,
-
-		kittens: PropTypes.shape({
-			loading: PropTypes.bool.isRequired,
-			data: PropTypes.array.isRequired
-		}).isRequired,
-
-		dispatch: PropTypes.func.isRequired
-
-	};
-
-	static async getInitialProps ({store, isServer, pathname, query}) {
-		// Get all kittens
-		const kittens = await store.dispatch(reduxApi.actions.kittens.sync());
-		return { kittens };
-	}
-
-	constructor (props) {
-		super(props)
-		this.state = { name: '' }
-	}
-
-	handleChangeInputText (event) {
-		this.setState({ name: event.target.value });
-	}
+  handleChangeInputText (event) {
+    this.setState({ name: event.target.value })
+  }
 
   handleAdd (event) {
     const { name } = this.state
@@ -68,43 +48,41 @@ class IndexPage extends Component {
     this.props.dispatch(reduxApi.actions.kittens.delete({ id: kittenId }, callbackWhenDone))
   }
 
-	render () {
+  render () {
+    const { kittens } = this.props// dd
 
-		const {kittens} = this.props;//dd
+    const kittenList = kittens.data
+      ? kittens.data.map((kitten, index) => <KittenItem
+        key={index}
+        kitten={kitten}
+        index={index}
+        inProgress={this.state.inProgress}
+        handleUpdate={this.handleUpdate.bind(this)}
+        handleDelete={this.handleDelete.bind(this)}
+      />)
+      : []
 
-		const kittenList = kittens.data
-			? kittens.data.map((kitten, index) => <KittenItem
-													key={index}
-													kitten={kitten}
-													index={index}
-													inProgress={this.state.inProgress}
-													handleUpdate={this.handleUpdate.bind(this)}
-													handleDelete={this.handleDelete.bind(this)}
-													/>)
-			: [];
+    return <div>
+      <PageHead
+        title='Next.js (React) + Express REST API + MongoDB + Mongoose-Crudify boilerplate'
+        description='Demo of nextjs-express-mongoose-crudify-boilerplate'
+      />
 
-		return <div>
-			<PageHead
-				title='Next.js (React) + Express REST API + MongoDB + Mongoose-Crudify boilerplate'
-				description='Demo of nextjs-express-mongoose-crudify-boilerplate'
-			/>
+      <h1>Kittens</h1>
 
-			<h1>Kittens</h1>
+      {kittenList}
+      <div>
+        <input placeholder='Enter a kitten name' value={this.state.name} onChange={this.handleChangeInputText.bind(this)} disabled={this.state.inProgress} />
+        <button onClick={this.handleAdd.bind(this)} disabled={this.state.inProgress}>Add kitten</button>
+        <style jsx>{`
+          div {
+            margin-top: 1em;
+          }
+        `}</style>
+      </div>
 
-			{kittenList}
-			<div>
-				<input placeholder='Enter a kitten name' value={this.state.name} onChange={this.handleChangeInputText.bind(this)} disabled={this.state.inProgress}/>
-				<button onClick={this.handleAdd.bind(this)} disabled={this.state.inProgress}>Add kitten</button>
-				<style jsx>{`
-					div {
-						margin-top: 1em;
-					}
-				`}</style>
-			</div>
-
-		</div>
-	};
-
+    </div>
+  };
 }
 
-export default withKittens(IndexPage);
+export default withKittens(IndexPage)

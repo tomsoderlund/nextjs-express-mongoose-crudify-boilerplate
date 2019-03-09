@@ -2,17 +2,17 @@
 	"name": "nextjs-express-mongoose-crudify-boilerplate",
 	"version": "4.0.0",
 	"description": "Next.js (React) + Redux + Express REST API + Mongoose CRUD boilerplate.",
-	"main": "server/index.js",
+	"main": "server/server.js",
 	"license": "ISC",
 	"scripts": {
 		"test": "echo 'Running Standard.js and Jasmine unit tests...\n' && yarn lint && yarn unit",
 		"unit": "jasmine",
 		"lint": "standard",
 		"fix": "standard --fix",
-		"dev": "nodemon -w server -w package.json server/index.js",
+		"dev": "nodemon -w server -w package.json server/server.js",
 		"build": "next build",
 		"heroku-postbuild": "next build",
-		"start": "NODE_ENV=production node server/index.js"
+		"start": "NODE_ENV=production node server/server.js"
 	},
 	"now": {
 		"name": "nextjs-express-mongoose-crudify-boilerplate",
